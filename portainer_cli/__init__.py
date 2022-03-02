@@ -5,6 +5,7 @@ import logging
 import json
 import plac
 import validators
+import getpass
 from requests import Request, Session
 
 
@@ -138,7 +139,12 @@ class PortainerCLI(object):
     def configure(self, base_url):
         self.base_url = base_url
 
-    def login(self, username, password):
+    def login(self, username=None, password=None):
+        if username is None and password is None:
+            username = input("Enter username:")
+            password = getpass.getpass('Password:')  
+        elif password is None:
+            password = getpass.getpass('Password:')   
         response = self.request(
             'auth',
             self.METHOD_POST,
